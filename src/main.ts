@@ -27,6 +27,9 @@ async function bootstrap() {
     credentials: false,
   });
 
+  // 服务统一前缀（适用于统一网关服务）
+  app.setGlobalPrefix("api/v1", { exclude: ["login"] });
+
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   // 使用swagger生成API文档
