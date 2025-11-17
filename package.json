@@ -6,21 +6,25 @@
   "scripts": {
     "build": "nest build",
     "start:dev": "nest start --watch",
-    "start:prod": "node ."
+    "start:prod": "node .",
+    "lint:eslint": "eslint --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
+    "@eslint/js": "^9.39.1",
     "@nestjs/common": "^11.1.9",
     "@nestjs/core": "^11.1.9",
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/platform-express": "^11.1.9",
     "@nestjs/swagger": "^11.2.2",
     "express": "^5.1.0",
+    "globals": "^16.5.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "typescript-eslint": "^8.46.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.10",

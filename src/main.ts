@@ -28,7 +28,7 @@ async function bootstrap() {
   });
 
   // 服务统一前缀（适用于统一网关服务）
-  app.setGlobalPrefix("api/v1", { exclude: ["login"] });
+  app.setGlobalPrefix("api/v1", { exclude: ["auth/login"] });
 
   app.useGlobalInterceptors(new ResponseInterceptor());
 
