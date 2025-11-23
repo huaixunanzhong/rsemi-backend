@@ -3,6 +3,7 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 import { ResponseInterceptor } from "./common/interceptors/response.interceptor";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ValidationPipe } from "@nestjs/common";
 
 // 开启swagger api
 function useSwagger(app: NestExpressApplication) {
@@ -28,7 +29,10 @@ async function bootstrap() {
   });
 
   // 服务统一前缀（适用于统一网关服务）
-  app.setGlobalPrefix("api/v1", { exclude: ["auth/login"] });
+  app.setGlobalPrefix("api/v1", { exclude: ["auth/login", "auth/register"] });
+
+  // 全局校验管道
+  app.useGlobalPipes(new ValidationPipe());
 
   app.useGlobalInterceptors(new ResponseInterceptor());
 

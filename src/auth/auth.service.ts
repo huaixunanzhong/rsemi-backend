@@ -1,29 +1,34 @@
-import {Injectable, UnauthorizedException} from '@nestjs/common';
-import {UsersService} from "../users/users.service";
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "../users/user.entity";
+import { Repository } from "typeorm";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private userService: UsersService,
-        private jwtService:JwtService
-    ) {}
+  constructor(
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
+    private jwtService: JwtService,
+  ) {}
 
+  async validateUser(email: string, password: string): Promise<any> {
+    console.log("validateUser", email, password);
+    const user = await this.userRepo.findOne({ where: { email } });
+    console.log("user", user);
+    if (!user) throw new UnauthorizedException("用户不存在");
 
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new UnauthorizedException("密码错误");
 
-    async login(data: any): Promise<any> {
-        const user=await this.userService.findOne(data.username)
-        if(user?.password!==data.password){
-            throw new UnauthorizedException()
-        }
+    return user;
+  }
 
-        const payload={sub:user.id,username:user.username}
-
-        return {
-            access_token: await this.jwtService.signAsync(payload)
-        }
-
-    }
-
-
+  async login(user: User) {
+    const payload = { sub: user.id, email: user.email };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
+  }
 }
